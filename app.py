@@ -27,27 +27,58 @@ if status:
     )
 
     if files:
+        st.success("PDF Uploaded")
 
-        text=load_pdfs(
-            files
+    if st.button("Process PDFs"):
+
+        with st.spinner("Processing PDF..."):
+
+            text = load_pdfs(files)
+
+            st.write(
+                "Characters:",
+                len(text)
+            )
+
+            chunks = chunk_text(text)
+
+            st.write(
+                "Chunks:",
+                len(chunks)
+            )
+
+            vectors = [
+                create_embedding(c)
+                for c in chunks
+            ]
+
+            build_vector_db(
+                vectors,
+                chunks
+            )
+
+        st.success(
+            "Index Created Successfully"
         )
+    
 
-        chunks=chunk_text(
-            text
-        )
+query = st.text_input(
+    "Ask Question"
+)
 
-        vectors=[
+if query:
 
-        create_embedding(
-        c
-        )
+    docs = retrieve(query)
 
-        for c
-        in chunks
-        ]
+    context = "\n".join(docs)
 
-        build_vector_db(
-            vectors,
-            chunks
-        )
+    result = ask_gemini(
+        query,
+        context
+    )
 
+    st.subheader(
+        "Answer"
+    )
+
+    st.write(result)
