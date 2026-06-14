@@ -1,0 +1,12 @@
+streamlit
+pypdf
+faiss-cpu
+sentence-transformers
+google-generativeai
+langchain
+langchain-community
+streamlit-authenticator
+python-dotenv
+numpy
+torch
+torchvision
